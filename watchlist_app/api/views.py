@@ -7,17 +7,9 @@ from rest_framework.views import APIView
 from rest_framework import generics, mixins, viewsets
 
 
-class StreamPlatformVS(viewsets.ViewSet):
-    def list(self, request):
-        queryset = StreamPlatform.objects.all()
-        serializer = StreamPlatformSerializer(queryset, many=True)
-        return Response(serializer.data)
-    
-    def retrieve(self, request, pk=None):
-        queryset = StreamPlatform.objects.all()
-        watchlist = generics.get_object_or_404(queryset, pk=pk)
-        serializer = StreamPlatformSerializer(watchlist)
-        return Response(serializer.data)
+class StreamPlatformVS(viewsets.ModelViewSet):
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
 
 
 class ReviewCreate(generics.CreateAPIView):
@@ -40,31 +32,6 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
-# class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-#     queryset = Review.objects.all()
-#     serializer_class = ReviewSerializer
-
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-    
-# class ReviewDetail(mixins.RetrieveModelMixin,
-#                    mixins.UpdateModelMixin,   
-#                    mixins.DestroyModelMixin,
-#                    generics.GenericAPIView):
-#     queryset = Review.objects.all()
-#     serializer_class = ReviewSerializer
-
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-
-#     def put(self, request, *args, **kwargs):
-#         return self.update(request, *args, **kwargs)
-
-#     def delete(self, request, *args, **kwargs):
-#         return self.destroy(request, *args, **kwargs)
 
 
 class StreamPlatformAV(APIView):
@@ -143,6 +110,63 @@ class WatchDetailAV(APIView):
         movie = Watchlist.objects.get(pk=pk)
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# class StreamPlatformVS(viewsets.ViewSet):
+#     def list(self, request):
+#         queryset = StreamPlatform.objects.all()
+#         serializer = StreamPlatformSerializer(queryset, many=True)
+#         return Response(serializer.data)
+    
+#     def retrieve(self, request, pk=None):
+#         queryset = StreamPlatform.objects.all()
+#         watchlist = generics.get_object_or_404(queryset, pk=pk)
+#         serializer = StreamPlatformSerializer(watchlist)
+#         return Response(serializer.data)
+    
+#     def post(self, request):
+#         serializer = StreamPlatformSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=201)
+#         return Response(serializer.errors, status=400)
+    
+#     def destroy(self, request, pk=None):
+#         queryset = StreamPlatform.objects.all()
+#         watchlist = generics.get_object_or_404(queryset, pk=pk)
+#         watchlist.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+# class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+    
+# class ReviewDetail(mixins.RetrieveModelMixin,
+#                    mixins.UpdateModelMixin,   
+#                    mixins.DestroyModelMixin,
+#                    generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+
+
 
 # @api_view(['GET', 'POST'])
 # def movie_list(request):
