@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics, mixins, viewsets
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 class StreamPlatformVS(viewsets.ModelViewSet):
@@ -31,6 +32,7 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -39,6 +41,7 @@ class ReviewList(generics.ListAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 
