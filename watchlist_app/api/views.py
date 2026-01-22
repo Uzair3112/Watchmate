@@ -1,6 +1,8 @@
 from django.forms import ValidationError
 from watchlist_app.models import Watchlist, StreamPlatform, Review
 from watchlist_app.api.serializers import WatchlistSerializer, StreamPlatformSerializer, ReviewSerializer
+from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+
 from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from rest_framework import status
@@ -41,7 +43,7 @@ class ReviewList(generics.ListAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ReviewUserOrReadOnly]
 
 
 
