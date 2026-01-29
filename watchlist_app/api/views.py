@@ -3,6 +3,7 @@ from watchlist_app.models import Watchlist, StreamPlatform, Review
 from watchlist_app.api.serializers import WatchlistSerializer, StreamPlatformSerializer, ReviewSerializer
 from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.api.throttling import ReviewCreateThrottle, ReviewListThrottle 
+from watchlist_app.api.pagination import WatchlistPagination
 
 from rest_framework.response import Response
 # from rest_framework.decorators import api_view
@@ -12,6 +13,7 @@ from rest_framework import generics, mixins, viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 class StreamPlatformVS(viewsets.ModelViewSet):
     queryset = StreamPlatform.objects.all()
@@ -114,6 +116,16 @@ class StreamPlatformDetailAV(APIView):
         except StreamPlatform.DoesNotExist:
             return Response({'Error': 'Stream Platform not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class WatchlistGV(generics.ListAPIView):
+    queryset = Watchlist.objects.all()
+    serializer_class = WatchlistSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['platform__name', 'active']
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['avg_rating']
+    
+    pagination_class = WatchlistPagination
 
 class WatchListAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
