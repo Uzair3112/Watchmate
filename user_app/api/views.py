@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from user_app.api.serializers import RegistrationSerializer
-# from user_app.models import create_auth_token
+from user_app.models import create_auth_token
 # from rest_framework_simplejwt.tokens import RefreshToken
 
 import rest_framework.status as status
